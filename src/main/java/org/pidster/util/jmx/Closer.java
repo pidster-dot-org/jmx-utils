@@ -28,7 +28,7 @@ import com.sun.tools.attach.VirtualMachine;
 
 
 /**
- * @author <a href="http://pidster.com/">pidster</a>
+ * @author <a href="http://pidster.org/">pidster</a>
  *
  */
 public class Closer {

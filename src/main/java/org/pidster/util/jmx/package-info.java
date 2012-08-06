@@ -18,7 +18,7 @@
  */
 
 /**
- * @author <a href="http://pidster.com/">pidster</a>
+ * @author <a href="http://pidster.org/">pidster</a>
  *
  */
 package org.pidster.util.jmx;
