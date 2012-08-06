@@ -93,6 +93,10 @@ public class JMXProxy {
             throw new QueryException(e);
         }
     }
+    
+    public <B> B getBean(String name, Class<B> beanClass) {
+        return getBean(name, beanClass, false);
+    }
 
     public <B> B getBean(String name, Class<B> beanClass, boolean notificationBroadcaster) {
         try {
@@ -101,6 +105,10 @@ public class JMXProxy {
         } catch (MalformedObjectNameException e) {
             throw new ProxyException(e);
         }
+    }
+
+    public <B> B getBean(ObjectName name, Class<B> beanClass) {
+        return getBean(name, beanClass, false);
     }
 
     public <B> B getBean(ObjectName name, Class<B> beanClass, boolean notificationBroadcaster) {
