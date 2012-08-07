@@ -29,6 +29,7 @@ import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -141,9 +142,16 @@ public class JMXProxy {
         
         try {
             List<GarbageCollectorMXBean> beans = new ArrayList<GarbageCollectorMXBean>();
+
             for (ObjectName on : names) {
-                GarbageCollectorMXBean bean = getBean(on, GarbageCollectorMXBean.class, true);
-                beans.add(bean);
+
+                GarbageCollectorMXBeanHandler handler = new GarbageCollectorMXBeanHandler(on, getConnection());
+
+                Class<?>[] arr = new Class[] { GarbageCollectorMXBean.class };
+                Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), arr, handler);
+
+                // GarbageCollectorMXBean bean = getBean(on, GarbageCollectorMXBean.class, true);
+                beans.add((GarbageCollectorMXBean) instance);
             }
             return beans;
 
@@ -159,9 +167,16 @@ public class JMXProxy {
 
         try {
             List<MemoryPoolMXBean> beans = new ArrayList<MemoryPoolMXBean>();
+
             for (ObjectName on : names) {
-                MemoryPoolMXBean bean = getBean(on, MemoryPoolMXBean.class, true);
-                beans.add(bean);
+
+                MemoryPoolMXBeanHandler handler = new MemoryPoolMXBeanHandler(on, getConnection());
+
+                Class<?>[] arr = new Class[] { MemoryPoolMXBean.class };
+                Object instance = Proxy.newProxyInstance(getClass().getClassLoader(), arr, handler);
+
+                // MemoryPoolMXBean bean = getBean(on, MemoryPoolMXBean.class, true);
+                beans.add((MemoryPoolMXBean) instance);
             }
             return beans;
 
@@ -175,7 +190,15 @@ public class JMXProxy {
     }
 
     public MemoryMXBean getMemoryMXBean() {
-        return getBean(ManagementFactory.MEMORY_MXBEAN_NAME, MemoryMXBean.class, true);
+        try {
+            ObjectName name = new ObjectName(ManagementFactory.MEMORY_MXBEAN_NAME);
+            MemoryMXBeanHandler handler = new MemoryMXBeanHandler(name, getConnection());
+            Class<?>[] arr = new Class[] { MemoryMXBean.class };
+            return (MemoryMXBean) Proxy.newProxyInstance(getClass().getClassLoader(), arr, handler);
+
+        } catch (Exception e) {
+            throw new UnlikelyRuntimeException(e);
+        }
     }
 
     public RuntimeMXBean getRuntimeMXBean() {
