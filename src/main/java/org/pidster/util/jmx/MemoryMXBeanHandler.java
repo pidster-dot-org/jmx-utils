@@ -45,7 +45,7 @@ public class MemoryMXBeanHandler extends AbstractMBeanHandler implements Invocat
             }
         }
 
-        return null;
+        throw new ProxyAttributeException("Proxy method " + methodName + " not found");
     }
     
 }

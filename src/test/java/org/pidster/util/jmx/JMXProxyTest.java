@@ -167,8 +167,12 @@ public class JMXProxyTest {
     public void testGetMemoryMXBean() {
         MemoryMXBean bean = proxy.getMemoryMXBean();
         assertNotNull(bean);
+
         assertNotNull(bean.getHeapMemoryUsage());
+        assertTrue(bean.getHeapMemoryUsage().getCommitted() > 0);
+
         assertNotNull(bean.getNonHeapMemoryUsage());
+        assertTrue(bean.getNonHeapMemoryUsage().getCommitted() > 0);
     }
 
     @Test
