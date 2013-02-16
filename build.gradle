@@ -18,10 +18,9 @@
  */
 
 def javaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
-if (javaHome.endsWith('/jre\\d*$')) javaHome = javaHome.replaceAll('/jre\\d*$', '')
+javaHome = javaHome.replaceAll('/jre\\d*$', '')
 
 apply plugin: 'java'
-apply plugin: 'publishing'
 apply from: 'gradle/setup.gradle'
 apply from: 'gradle/maven.gradle'
 
@@ -32,13 +31,6 @@ targetCompatibility = '1.6'
 
 repositories {
     mavenCentral()
-}
-
-publishing {
-  repositories {
-    // Maven Central Staging
-    maven { url "https://oss.sonatype.org/service/local/staging/deploy/maven2/" }
-  }
 }
 
 dependencies {
