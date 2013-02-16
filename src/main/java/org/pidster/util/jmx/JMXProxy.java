@@ -94,7 +94,7 @@ public class JMXProxy {
             throw new QueryException(e);
         }
     }
-    
+
     public <B> B getBean(String name, Class<B> beanClass) {
         return getBean(name, beanClass, false);
     }

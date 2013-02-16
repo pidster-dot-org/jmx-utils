@@ -16,16 +16,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+def javaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
+if (javaHome.endsWith('/jre\\d*$')) javaHome = javaHome.replaceAll('/jre\\d*$', '')
+
 apply plugin: 'java'
+apply plugin: 'publishing'
 apply from: 'gradle/setup.gradle'
 apply from: 'gradle/maven.gradle'
-
-// Hack for coping with STS/Eclipse Gradle plugin selecting a JRE
-def javaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
-if (javaHome.endsWith('/jre')) javaHome = javaHome.replaceAll('/jre$', '')
-
-repositories {
-}
 
 defaultTasks = ['assemble']
 
@@ -33,10 +31,14 @@ sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 repositories {
-    flatDir {
-        dirs file("$javaHome/lib")
-    }
     mavenCentral()
+}
+
+publishing {
+  repositories {
+    // Maven Central Staging
+    maven { url "https://oss.sonatype.org/service/local/staging/deploy/maven2/" }
+  }
 }
 
 dependencies {

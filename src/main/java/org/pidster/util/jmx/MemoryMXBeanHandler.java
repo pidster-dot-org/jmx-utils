@@ -32,7 +32,7 @@ public class MemoryMXBeanHandler extends AbstractMBeanHandler implements Invocat
 
         if (args == null || args.length == 0) {
             Object obj = getAttribute(attribute);
-            System.out.println("attribute: " + methodName + " = " + obj);
+
             if ("getType".equals(methodName)) {
                 return MemoryType.valueOf((String) obj);
             }

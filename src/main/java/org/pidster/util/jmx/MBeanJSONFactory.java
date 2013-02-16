@@ -19,6 +19,18 @@
 
 package org.pidster.util.jmx;
 
+import java.io.IOException;
+
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.InstanceNotFoundException;
+import javax.management.IntrospectionException;
+import javax.management.MBeanAttributeInfo;
+import javax.management.MBeanInfo;
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectName;
+import javax.management.ReflectionException;
+
 
 /**
  * @author <a href="http://pidster.org/">pidster</a>
@@ -26,6 +38,42 @@ package org.pidster.util.jmx;
  */
 public class MBeanJSONFactory {
 
-    
+    public static MBeanJSON getMBeanJSON(ObjectName name, MBeanServerConnection connection) {
+
+        try {
+            MBeanInfo info = connection.getMBeanInfo(name);
+            MBeanAttributeInfo[] attributes = info.getAttributes();
+
+            AttributeList list = new AttributeList();
+            for (MBeanAttributeInfo mai : attributes) {
+
+                Object val;
+                try {
+                    val = connection.getAttribute(name, mai.getName());
+                }
+                catch (Exception e) {
+                    Throwable t = e;
+                    while (t.getCause() != null) {
+                        t = t.getCause();
+                    }
+                    val = t.getMessage();
+                }
+
+                Attribute attr = new Attribute(mai.getName(), val);
+                list.add(attr);
+            }
+
+            return new MBeanJSON(name, info, list);
+
+        } catch (InstanceNotFoundException e) {
+            throw new MBeanJSONException(e);
+        } catch (IntrospectionException e) {
+            throw new MBeanJSONException(e);
+        } catch (ReflectionException e) {
+            throw new MBeanJSONException(e);
+        } catch (IOException e) {
+            throw new MBeanJSONException(e);
+        }
+    }
 
 }

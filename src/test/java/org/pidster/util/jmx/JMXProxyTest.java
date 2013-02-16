@@ -46,6 +46,7 @@ public class JMXProxyTest {
         assertEquals(1, names.size());
 
         ObjectName name = names.iterator().next();
+        assertNotNull(name);
     }
 
     @Test
@@ -54,6 +55,7 @@ public class JMXProxyTest {
         assertEquals(1, names.size());
 
         ObjectName name = names.iterator().next();
+        assertNotNull(name);
     }
 
     @Test

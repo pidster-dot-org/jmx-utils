@@ -61,7 +61,7 @@ public class MBeanServerProxyTest {
             assertNotNull(objectName);
             assertNotNull(info);
 
-            MBeanInfoJSON json = new MBeanInfoJSON(info);
+            MBeanJSON json = MBeanJSONFactory.getMBeanJSON(objectName, proxy.getConnection());
             System.out.println("name: " + json.toJSON());
 
             
